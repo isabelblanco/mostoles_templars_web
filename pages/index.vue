@@ -1,27 +1,52 @@
 <template>
-<div>
-  <v-row>
-    <v-col cols="12" align="center">
-      <p class="title">
-        In construction
-      </p>
-    </v-col>
-  </v-row>
-  <v-row>
-    <v-col cols="12" align="center">
-      <img src="~/assets/images/solo_templario.png" alt="caballero templario">
-    </v-col>
-  </v-row>
+<div v-if="this.dataContent && this.dataContent.TEXTOS">
+  <in-construction :content='dataContent'></in-construction>
 </div>
 </template>
 
-<style scoped>
-  .title {
-    font-size: 10em;
-    color: #08a0c7;
-  }
+<script>
+  import firebase from "firebase/app";
+  import "firebase/analytics";
+  import "firebase/auth";
+  import "firebase/firestore";
+  import in_construction from '../components/in_construction.vue'
 
-  img {
-    width: 750px;
+  export default {
+    components: {
+      name: "in-dd",
+      in_construction
+    },
+    data: function() {
+      return {
+        dataContent: {},
+      }
+    },
+    mounted: function() {
+      const config = {
+        apiKey: "AIzaSyBGksiQGKDQ1jM5jTf7AEN_wf54Sdp3gJU",
+        authDomain: "mostolestemplarsweb.firebaseapp.com",
+        databaseURL: "https://mostolestemplarsweb-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "mostolestemplarsweb",
+        storageBucket: "mostolestemplarsweb.appspot.com",
+        messagingSenderId: "949832789348",
+        appId: "1:949832789348:web:ffd8e309642531be3a5e71",
+        measurementId: "G-G69DCC48LP"
+      }
+
+      if (!firebase.apps.length) {  
+        firebase.initializeApp(config)
+      }
+      let info = {}
+      const db = firebase.firestore();
+      db.collection("CONTENT")
+        .get()
+        .then((data) => {
+          data.forEach((doc) => {
+            info[doc.id] = doc.data();
+          });
+          this.dataContent = info;
+        }
+      );
+    }
   }
-</style>
+</script>
