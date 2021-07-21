@@ -1,5 +1,5 @@
 <template>
-<div v-if="this.dataContent && this.dataContent.TEXTOS">
+<div class="v-application" v-if="this.dataContent && this.dataContent.TEXTOS">
   <in-construction :content='dataContent'></in-construction>
 </div>
 </template>
